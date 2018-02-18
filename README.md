@@ -13,6 +13,7 @@ sci-kit-learn (0.19.0)
 
 BeautifulSoup4 (4.6.0)
 
+NumPy (1.14.0)
 
 The following default packages are installed:
 
