@@ -15,6 +15,8 @@ BeautifulSoup4 (4.6.0)
 
 NumPy (1.14.0)
 
+SciPy (1.0.0)
+
 The following default packages are installed:
 
 urllib
