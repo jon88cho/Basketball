@@ -101,7 +101,7 @@ def playoff_elim (keep_html = True, dirname = 'HTML'):
         playoff_elim_df = playoff_elim_df.append(df,ignore_index=True)
         playoff_elim_df.to_csv("playoff_elim_df.csv", index = False)
     return playoff_elim_df
-pd.concat
+
 def get_leagues_html(keep_html = True, dirname = 'HTML'):
     #download html into specified directory
     per_game_all = pd.DataFrame()
