@@ -130,26 +130,28 @@ def get_leagues_html(keep_html = True, dirname = 'HTML'):
         df_list = pd.io.html.read_html(cleaned_name)
         #remove NaN columns resulting from whitespace in html
         #drop league averages
-        for i in df_list:
-            i = i.drop(30)
+        for i in range(len(df_list)):
+            df_list[i] = df_list[i].drop(len(df_list[i])-1)
         #drop NaN rows and columns
         df_list = [df.T.dropna().T for df in df_list]
+        print(df_list[0].head())
+        print(df_list[0].tail())
         column_names = {0: "_game", 1: "_opp_game", 4: "_poss", 5: "_opp_poss"}
         for i in range(len(df_list)):
             if i ==2 or i == 3:
                 continue
             else:
                 #set index to team name (for concatenation later)
-                df_list[i].index = df[i]['Team']
+                df_list[i].index = df_list[i]['Team']
                 #change name to more easily identify df
-                new_clmns = {clmn: clmn + column_names[i] for clmn in df_list[i].index}
+                new_clmns = {clmn: clmn + column_names[i] for clmn in df_list[i]}
                 df_list[i] = df_list[i].rename(index = str, columns = new_clmns)
-                
+                print(df_list[i].head())
         #concatenate team and opponent stats
         per_game = pd.concat([df_list[0], df_list[1]], axis = 1)
         per_poss = pd.concat([df_list[4], df_list[5]], axis=1)
-        per_game['Year'] = pd.Series([year for i in len(per_game)])
-        per_poss['Year'] = pd.Series([year for i in len(per_poss)])
+        per_game['Year'] = pd.Series([year for i in range(len(per_game.index))], index=per_game.index)
+        per_poss['Year'] = pd.Series([year for i in range(len(per_poss.index))], index=per_poss.index)
         per_game_all = per_game_all.append(per_game)
         per_poss_all = per_poss_all.append(per_poss)
     
