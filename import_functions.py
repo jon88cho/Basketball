@@ -28,7 +28,7 @@ def team_ratings (keep_html = True, dirname = 'HTML'):
 
 
     #2017 season doesnt have the hierachy like the rest of the seasons, append separately
-    url1 = 'leagues/NBA_2017_ratings.html'
+    url1 = '%s/leagues_NBA_2017_ratings.html' % dirname
     dframe_list1 = pd.io.html.read_html(url1)
     dframe17 = dframe_list1[0]
     dframe17['Year'] = Series ([2017 for i in range(len(dframe17.index))]) #year column
@@ -50,7 +50,7 @@ def Champion(keep_html = True, dirname = 'HTML'):
         
     for year in range (1986,2018):
         name = '%s/playoffs_NBA_%d.html' % (dirname, year)
-        r = urllib.request.urlopen(name).read()
+        r = open(name)
         soup = BeautifulSoup(r,'lxml')
         list1=[]
         for text in soup.find_all('p'):
@@ -80,7 +80,7 @@ def playoff_elim (keep_html = True, dirname = 'HTML'):
             doc.retrieve(url1, name)
         
     for x in range (1986,2018):
-        name = 'playoffs/NBA_%d.html' % x
+        name = '%s/playoffs_NBA_%d.html' % (dirname, x)
         dframe_list = pd.io.html.read_html(name)
         raw_dframe = dframe_list[16]
         teams_not_in_finals = raw_dframe['Team'][2:16]
@@ -121,6 +121,7 @@ def get_leagues_html(keep_html = True, dirname = 'HTML'):
         code = code[start:end]
         code = code.replace('<!--', '') #the tables are commented out orginally
         code = code.replace('-->', '')  #this clears that so pandas can read them
+        
         cleaned_name = name[:len(name) - 5] + '_cleaned.html'
         cleaned_html = open(cleaned_name, 'w')
         cleaned_html.write(code)
@@ -128,15 +129,13 @@ def get_leagues_html(keep_html = True, dirname = 'HTML'):
         #read in the tables from cleaned html
         #order is: team per game, opponent per game, team-stats-base, opponent-stats-base, team-stats-per poss, opponent-per-poss
         df_list = pd.io.html.read_html(cleaned_name)
-        #remove NaN columns resulting from whitespace in html
         #drop league averages
         for i in range(len(df_list)):
             df_list[i] = df_list[i].drop(len(df_list[i])-1)
-        #drop NaN rows and columns
+        #drop NaN rows and columns (resulting from whitespace in html)
         df_list = [df.T.dropna().T for df in df_list]
-        print(df_list[0].head())
-        print(df_list[0].tail())
-        column_names = {0: "_game", 1: "_opp_game", 4: "_poss", 5: "_opp_poss"}
+        
+        column_names = {0: "_game", 1: "_opp_game", 4: "_poss", 5: "_opp_poss"} #see comment on order of dfs above
         for i in range(len(df_list)):
             if i ==2 or i == 3:
                 continue
@@ -146,7 +145,7 @@ def get_leagues_html(keep_html = True, dirname = 'HTML'):
                 #change name to more easily identify df
                 new_clmns = {clmn: clmn + column_names[i] for clmn in df_list[i]}
                 df_list[i] = df_list[i].rename(index = str, columns = new_clmns)
-                print(df_list[i].head())
+        
         #concatenate team and opponent stats
         per_game = pd.concat([df_list[0], df_list[1]], axis = 1)
         per_poss = pd.concat([df_list[4], df_list[5]], axis=1)
@@ -158,3 +157,5 @@ def get_leagues_html(keep_html = True, dirname = 'HTML'):
     per_game_all.to_csv("per_game_all.csv", index=False)
     per_poss_all.to_csv("per_poss_all.csv", index=False)
     return per_game_all, per_poss_all
+
+
