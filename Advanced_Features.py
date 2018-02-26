@@ -20,7 +20,7 @@ def Correlated_Gaussian_Winning_Percentage(df,year):
 #This stat is probably a good predictor because a team that has "good ball movement" tend to win (might be wrong obv)
 def assist_ratio (Team):
     Assists,FGA,FTA,TO = Team
-    return ((Assists)*100)/ [(FGA)+(FTA*0.44)+(Assists)+(TO)]
+    return (((Assists)*100)/ ((FGA)+(FTA*0.44)+(Assists)+(TO)))
 #df['assist_ratio'] = df[['Assists','FGA','FTA','TO']].apply(assist_ratio,axis=1)
 #The method that gives an expected winning percentage using the ratio of a team’s wins and losses
 #is related to the number of points scored and allowed.
@@ -55,6 +55,10 @@ def Defensive_Rebouding_Percentage(team):
 def Offensive_Rebounding_Percentage(team):
     Offensive_Rebounds,Opponent_Defensive_Rebounds = team
     return ((Offensive_Rebounds)/((Offensive_Rebounds)+(Opponent_Defensive_Rebounds)))
+#number of possessions a team has
+def possessions (team):
+    FGA,Turnovers,FTA,Offensive_Rebounds= team
+    return 0.96*((FGA)+(Turnovers)+0.44*(FTA)-(Offensive_Rebounds))
 #shows how fast a team plays
 def pace (team):
     Team_Minutes,Possession_Team,Possession_Opponent = team
