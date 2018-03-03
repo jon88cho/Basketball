@@ -15,7 +15,7 @@ def get_all_defense():
     transposed.columns = [''] * len(transposed.columns)
     #Create first team DataFrame
     First_Team = DataFrame(columns = ['Player','Year'])
-    year= 2017
+    year= 2016
     for i in range (0,44,2):
         temp_df = DataFrame(columns = ['Player','Year'])
         temp_df['Player']= transposed.iloc[:,[i]].reset_index().drop(columns = ['index'])
@@ -25,7 +25,7 @@ def get_all_defense():
     First_Team = First_Team.reset_index().drop(columns = ['index'])
     #Create second team DataFrame
     Second_Team = DataFrame(columns = ['Player','Year'])
-    year = 2017
+    year = 2016
     for i in range (1,45,2):
         temp_df = DataFrame(columns = ['Player','Year'])
         temp_df['Player']= transposed.iloc[:,[i]].reset_index().drop(columns = ['index'])
@@ -54,9 +54,13 @@ def get_all_defense():
     Second_Team = Second_Team.append(temp_df3)
 
     #Sort the entries back to descending year order
+    First_Team['Year'] = First_Team['Year'].astype(float)
+    Second_Team['Year'] = Second_Team['Year'].astype(float)
     First_Team = First_Team.sort_values(['Year'], ascending=False)
     Second_Team = Second_Team.sort_values(['Year'], ascending=False)
     First_Team = First_Team.reset_index().drop(columns = ['index'])
     Second_Team = Second_Team.reset_index().drop(columns = ['index'])
+    First_Team.drop_duplicates(inplace=True)
+    Second_Team.drop_duplicates(inplace=True)
     return First_Team,Second_Team
 
