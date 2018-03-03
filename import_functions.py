@@ -2,8 +2,21 @@ from pandas import read_html
 import pandas as pd
 from pandas import Series, DataFrame
 from bs4 import BeautifulSoup
-import urllib.request
+from urllib.request import urlretrieve
+import urllib.request  #remove later
 import os
+
+def get_html(url, dirname = 'HTML', start_year = 1986, end_year = 2017):
+    if not os.path.isdir('./' + dirname):
+        os.mkdir(dirname)
+    if '%d' not in url:
+        print("Invalid string, needed '%d' place holder for year")
+        return
+    for year in range(start_year, end_year + 1):
+        url = url % year
+        s = url.split('/')
+        name = "%s/%s_%s" % (dirname, s[-2], s[-1])
+        urlretrieve(url, name)
 
 #Pulling regular season team ratings from 1986 to 2017
 def team_ratings (keep_html = True, dirname = 'HTML'):
