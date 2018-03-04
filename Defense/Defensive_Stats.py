@@ -12,11 +12,11 @@ def cleanup_index(name):
 #Will return 1 dataframe
 def player_stats():
     Player_info = DataFrame()
-    for i in range (1986,2017):
+    for i in range (1986,2018):
         url = 'https://www.basketball-reference.com/leagues/NBA_%d_per_game.html' % (i)
         dframe_list = pd.io.html.read_html(url)
         temp_df = dframe_list[0]
-        temp_df['Year'] = Series ([i for j in range(len(temp_df.index))])
+        temp_df['Year'] = Series ([i-1 for j in range(len(temp_df.index))])
         Player_info = Player_info.append(temp_df)
     return Player_info
 #Will return 4 dataframes
@@ -30,7 +30,7 @@ def Defensive_Stats():
     cleanup_index(Defensive_Tracking.columns)
     Defensive_Tracking = Defensive_Tracking.rename(columns = {'TEAM_ABBREVIATION':'Team','PLAYER_NAME': 'Player'})
     Defensive_Tracking['Player'] = Defensive_Tracking['Player'].apply(cleanup)
-    Defensive_Tracking['Year'] = Defensive_Tracking['Year'].astype(float)
+    Defensive_Tracking.loc[:,'GP':'Year']= Defensive_Tracking.loc[:,'GP':'Year'].astype(float)
     #Defense_General
     Defense_General = DataFrame()
     for i in range (96,100):
@@ -47,7 +47,8 @@ def Defensive_Stats():
     Defense_General['Player'] = Defense_General['Player'].astype(str).apply(cleanup)
     Defense_General['Team'] = Defense_General['Team'].astype(str).apply(cleanup)
     Defense_General['Year'] = Defense_General['Year'].astype(float)
-        
+    Defense_General.loc[:,'Age':'DEF_WS_RANK']= Defense_General.loc[:,'Age':'DEF_WS_RANK'].replace([' None'], '0')
+    Defense_General.loc[:,'Age':'DEF_WS_RANK']= Defense_General.loc[:,'Age':'DEF_WS_RANK'].astype(float)    
     #Shooting
     Shooting = DataFrame()
     for i in range (96,100):
@@ -58,8 +59,8 @@ def Defensive_Stats():
         df2 = pd.read_csv("Player_Csvs/Opponent_Shooting/Shooting%d.csv" % (j))
         df2['Year'] = Series ([j+2000 for k in range(len(df2.index))])
         Shooting = Shooting.append(df2)
-    Shooting = Shooting.rename(columns = {' TEAM_ABBREVIATION':'Team',' OPP_FGM': "Less than 5 Ft FGM", ' OPP_FGA' : "Less than 5 Ft FGA",
-           ' OPP_FG_PCT' : "Less than 5 Ft FG%",
+    Shooting = Shooting.rename(columns = {' TEAM_ABBREVIATION':'Team',' OPP_FGM': "<5Ft FGM", ' OPP_FGA' : "<5 Ft FGA",
+           ' OPP_FG_PCT' : "<5 Ft FG%",
                    ' OPP_FGM.1': "5-9 Ft GM", ' OPP_FGA.1' : "5-9 Ft FGA",
            ' OPP_FG_PCT.1' : "5-9 Ft FG%",
                    ' OPP_FGM.2': "10-14 Ft FGM", ' OPP_FGA.2' : "10-14 Ft FGA",
@@ -69,11 +70,13 @@ def Defensive_Stats():
                    ' OPP_FGM.4': "20-24 Ft FGM", ' OPP_FGA.4' : "20-24 Ft FGA",
            ' OPP_FG_PCT.4' : "20-24 Ft FG%",
                    ' OPP_FGM.5': "25-29 Ft FGM", ' OPP_FGA.5' : "25-29 Ft FGA",
-           ' OPP_FG_PCT.5' : "25-20 Ft FG%"," PLAYER_NAME":"Player"," AGE":"Age"})
+           ' OPP_FG_PCT.5' : "25-29 Ft FG%"," PLAYER_NAME":"Player"," AGE":"Age"})
     Shooting['Team'] = Shooting['Team'].astype(str).apply(cleanup)
     Shooting['Player'] = Shooting['Player'].astype(str).apply(cleanup)
     Shooting = Shooting.drop(['PLAYER_ID',' TEAM_ID',' OPP_FGM.6',' OPP_FGA.6',' OPP_FG_PCT.6',' OPP_FGM.7',
                    ' OPP_FGA.7',' OPP_FG_PCT.7',' OPP_FGM.8',' OPP_FG_PCT.8','Age','Team'],axis=1)
+    Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%'] = Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%'].replace([' None'], '0')
+    Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%']= Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%'].astype(float)
 
     #Hustle Stats
     Hustle = DataFrame()
