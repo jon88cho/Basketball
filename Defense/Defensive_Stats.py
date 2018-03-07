@@ -48,7 +48,8 @@ def Defensive_Stats():
     Defense_General['Team'] = Defense_General['Team'].astype(str).apply(cleanup)
     Defense_General['Year'] = Defense_General['Year'].astype(float)
     Defense_General.loc[:,'Age':'DEF_WS_RANK']= Defense_General.loc[:,'Age':'DEF_WS_RANK'].replace([' None'], '0')
-    Defense_General.loc[:,'Age':'DEF_WS_RANK']= Defense_General.loc[:,'Age':'DEF_WS_RANK'].astype(float)    
+    Defense_General.loc[:,'Age':'DEF_WS_RANK']= Defense_General.loc[:,'Age':'DEF_WS_RANK'].astype(float)
+    Defense_General = Defense_General.drop_duplicates()
     #Shooting
     Shooting = DataFrame()
     for i in range (96,100):
