@@ -60,9 +60,9 @@ def Defensive_Stats():
         df2 = pd.read_csv("Player_Csvs/Opponent_Shooting/Shooting%d.csv" % (j))
         df2['Year'] = Series ([j+2000 for k in range(len(df2.index))])
         Shooting = Shooting.append(df2)
-    Shooting = Shooting.rename(columns = {' TEAM_ABBREVIATION':'Team',' OPP_FGM': "<5Ft FGM", ' OPP_FGA' : "<5 Ft FGA",
-           ' OPP_FG_PCT' : "<5 Ft FG%",
-                   ' OPP_FGM.1': "5-9 Ft GM", ' OPP_FGA.1' : "5-9 Ft FGA",
+    Shooting = Shooting.rename(columns = {' TEAM_ABBREVIATION':'Team',' OPP_FGM': "<5Ft FGM", ' OPP_FGA' : "<5Ft FGA",
+           ' OPP_FG_PCT' : "<5Ft FG%",
+                   ' OPP_FGM.1': "5-9 Ft FGM", ' OPP_FGA.1' : "5-9 Ft FGA",
            ' OPP_FG_PCT.1' : "5-9 Ft FG%",
                    ' OPP_FGM.2': "10-14 Ft FGM", ' OPP_FGA.2' : "10-14 Ft FGA",
            ' OPP_FG_PCT.2' : "10-14 Ft FG%",
@@ -76,8 +76,8 @@ def Defensive_Stats():
     Shooting['Player'] = Shooting['Player'].astype(str).apply(cleanup)
     Shooting = Shooting.drop(['PLAYER_ID',' TEAM_ID',' OPP_FGM.6',' OPP_FGA.6',' OPP_FG_PCT.6',' OPP_FGM.7',
                    ' OPP_FGA.7',' OPP_FG_PCT.7',' OPP_FGM.8',' OPP_FG_PCT.8','Age','Team'],axis=1)
-    Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%'] = Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%'].replace([' None'], '0')
-    Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%']= Shooting.loc[:,'<5 Ft FGA':'25-29 Ft FG%'].astype(float)
+    Shooting.loc[:,'<5Ft FGM':'Year'] = Shooting.loc[:,'<5Ft FGM':'Year'].replace([' None'], '0')
+    Shooting.loc[:,'<5Ft FGM':'Year']= Shooting.loc[:,'<5Ft FGM':'Year'].astype(float)
 
     #Hustle Stats
     Hustle = DataFrame()
