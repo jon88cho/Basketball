@@ -3,7 +3,11 @@ This notebook is ran on Python 3.6.3
 
 The following packages are installed and imported:
 
+<<<<<<< HEAD
 Pandas (0.21.1)
+=======
+Pandas (0.22.0)
+>>>>>>> master
 
 Seaborn (0.8.1)
 
